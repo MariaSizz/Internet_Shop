@@ -23,11 +23,15 @@ public class ProductBasket {
 
     public void printBasketContents() {
         int totalCost = 0;
+        int specialCount = 0;
         boolean isEmpty = true;
         for (int i = 0; i < products.length; i++) {
             if (products[i] != null) {
-                System.out.println(products[i].getProductName() + ": " + products[i].getProductCost());
-                totalCost = totalCost + products[i].getProductCost();
+                System.out.println(products[i].toString());
+                totalCost += products[i].getProductCost();
+                if (products[i].isSpecial()) {
+                    specialCount ++;
+                }
                 isEmpty = false;
             }
         }
@@ -36,6 +40,7 @@ public class ProductBasket {
             System.out.println("Итого: " + totalCost);
         } else {
             System.out.println("Итого: " + totalCost);
+            System.out.println("Специальных товаров: " + specialCount);
         }
     }
 
@@ -48,7 +53,8 @@ public class ProductBasket {
         return false;
     }
 
-    public void clear() {
+
+    public void clearBasket() {
         Arrays.fill(products, null);
     }
 }
