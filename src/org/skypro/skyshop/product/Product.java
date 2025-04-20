@@ -3,7 +3,6 @@ package org.skypro.skyshop.product;
 public abstract class Product {
     private String productName;
     public abstract int getProductCost();
-    //private int productCost;
 
     public Product(String productName) {
         this.productName = productName;
