@@ -6,7 +6,6 @@ public abstract class Product {
 
     public Product(String productName) {
         this.productName = productName;
-        //this.productCost = productCost;
     }
 
     public String getProductName() {
