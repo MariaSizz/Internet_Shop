@@ -30,7 +30,7 @@ public class Article implements Searchable {
     }
 
     @Override
-    public String getProductName() {
+    public String getName() {
         return title;
     }
 
@@ -39,4 +39,3 @@ public class Article implements Searchable {
         return title + "\n" + text;
     }
 }
-

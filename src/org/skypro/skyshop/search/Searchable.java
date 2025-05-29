@@ -6,9 +6,10 @@ public interface Searchable {
 
     String getContentType();
 
-    String getProductName();
+    String getName();
 
     default String getStringRepresentation() {
-        return getProductName() + " — " + getContentType();
+        return getName() + " — " + getContentType();
     }
 }
+
