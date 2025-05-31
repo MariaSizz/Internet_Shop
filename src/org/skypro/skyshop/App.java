@@ -1,31 +1,53 @@
 package org.skypro.skyshop;
 
-import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.product.DiscountProduct;
+import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.search.BestResultNotFound;
+import org.skypro.skyshop.search.SearchEngine;
+import org.skypro.skyshop.search.Searchable;
+
 
 public class App {
-    public static void main (String[] args) {
-        ProductBasket basket = new ProductBasket(5);
-        Product product1 = new Product("tomato",100);
-        Product product2 = new Product("potato",50);
-        Product product3 = new Product("milk",70);
-        Product product4 = new Product("cheese",200);
-        Product product5 = new Product("pumpkin",80);
-        Product product6 = new Product("orange",100);
-        basket.addProduct(product1);
-        basket.addProduct(product2);
-        basket.addProduct(product3);
-        basket.addProduct(product4);
-        basket.addProduct(product5);
-        basket.addProduct(product6);
-        basket.printBasketContents();
-        boolean result1 = basket.checkProduct(product1);
-        boolean result6 = basket.checkProduct(product6);
-        System.out.println(result1);
-        System.out.println(result6);
-        basket.clear();
-        basket.printBasketContents();
-        boolean result2 =basket.checkProduct(product1);
-        System.out.println(result2);
+    public static void main(String[] args) {
+        try {
+            Product invalidProduct = new SimpleProduct("", 100);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+
+        try {
+            Product invalidPrice = new SimpleProduct("Телефон", 0);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+
+        try {
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+
+
+        final Product p = new SimpleProduct("Телефон Samsung", 10000);
+        System.out.println(p);
+        SearchEngine searchEngine = new SearchEngine(10);
+        searchEngine.add(new SimpleProduct("Телефон Samsung", 10000));
+        searchEngine.add(new DiscountProduct("Телефон Xiaomi", 15000, 20));
+        searchEngine.add(new FixPriceProduct("Чехол для телефона"));
+
+        try {
+            Searchable bestMatch = searchEngine.findBestMatch("телефон");
+            System.out.println("Найден лучший результат: " + bestMatch.getSearchTerm());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка поиска: " + e.getMessage());
+        }
+
+        try {
+            Searchable bestMatch = searchEngine.findBestMatch("несуществующий запрос");
+            System.out.println("Найден лучший результат: " + bestMatch.getSearchTerm());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка поиска: " + e.getMessage());
+        }
     }
 }
