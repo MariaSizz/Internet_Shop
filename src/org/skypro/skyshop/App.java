@@ -14,22 +14,18 @@ import java.util.Map;
 
 public class App {
     public static void main(String[] args) {
-        // Создание товаров
         Product phone1 = new SimpleProduct("Телефон", 15000);
         Product phone2 = new SimpleProduct("Телефон", 15000);
         Product laptop = new DiscountProduct("Ноутбук", 50000, 10);
 
-        // Создание корзины
         ProductBasket basket = new ProductBasket();
         basket.addProduct(phone1);
         basket.addProduct(phone2);
         basket.addProduct(laptop);
 
-        // Вывод содержимого корзины
         System.out.println("Содержимое корзины:");
         basket.printBasketContents();
 
-        // удаления по имени
         System.out.println("\nУдаление 'Телефон':");
         List<Product> removedPhones = basket.removeByName("Телефон");
         if (removedPhones != null) {
@@ -43,13 +39,11 @@ public class App {
         System.out.println("\nСодержимое корзины после удаления:");
         basket.printBasketContents();
 
-        // Создание SearchEngine
         SearchEngine searchEngine = new SearchEngine();
         searchEngine.add(phone1);
         searchEngine.add(laptop);
         searchEngine.add(new Article("Обзор телефона", "Телефон имеет отличную камеру."));
 
-        // поиск
         System.out.println("\nПоиск по 'телефон':");
         Map<String, Searchable> results = searchEngine.search("телефон");
         for (Map.Entry<String, Searchable> entry : results.entrySet()) {

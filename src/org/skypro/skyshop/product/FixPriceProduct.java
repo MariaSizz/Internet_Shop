@@ -9,7 +9,7 @@ public class FixPriceProduct extends Product {
 
     @Override
     public boolean isSpecial() {
-        return true; // Товар со скидкой — специальный
+        return true;
     }
 
     @Override

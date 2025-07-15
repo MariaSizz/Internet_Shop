@@ -18,7 +18,7 @@ public class DiscountProduct extends Product {
 
     @Override
     public boolean isSpecial() {
-        return true; // Товар со скидкой — специальный
+        return true;
     }
 
     @Override

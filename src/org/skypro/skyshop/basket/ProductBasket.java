@@ -12,17 +12,11 @@ public class ProductBasket {
 
     public void addProduct(Product product) {
         String name = product.getName();
-        // Проверяем, есть ли уже список для данного имени продукта
         if (!productsMap.containsKey(name)) {
-            // Если нет, создаем новый список и кладем его в Map
             productsMap.put(name, new ArrayList<>());
         }
 
-        // Добавляем продукт в список
         productsMap.get(name).add(product);
-
-        //короткая запись с использованием computeIfAbsent
-//        productsMap.computeIfAbsent(name, k -> new ArrayList<>()).add(product);
     }
 
     public void printBasketContents() {
