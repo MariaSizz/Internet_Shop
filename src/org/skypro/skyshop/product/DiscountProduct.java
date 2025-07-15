@@ -31,4 +31,3 @@ public class DiscountProduct extends Product {
         return getName() + ": " + getPrice() + " (" + discountPercent + "%)";
     }
 }
-

@@ -1,53 +1,59 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.content.Article;
 import org.skypro.skyshop.product.DiscountProduct;
-import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
-import org.skypro.skyshop.search.BestResultNotFound;
 import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
+
+import java.util.List;
+import java.util.Map;
 
 
 public class App {
     public static void main(String[] args) {
-        try {
-            Product invalidProduct = new SimpleProduct("", 100);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка: " + e.getMessage());
+        // Создание товаров
+        Product phone1 = new SimpleProduct("Телефон", 15000);
+        Product phone2 = new SimpleProduct("Телефон", 15000);
+        Product laptop = new DiscountProduct("Ноутбук", 50000, 10);
+
+        // Создание корзины
+        ProductBasket basket = new ProductBasket();
+        basket.addProduct(phone1);
+        basket.addProduct(phone2);
+        basket.addProduct(laptop);
+
+        // Вывод содержимого корзины
+        System.out.println("Содержимое корзины:");
+        basket.printBasketContents();
+
+        // удаления по имени
+        System.out.println("\nУдаление 'Телефон':");
+        List<Product> removedPhones = basket.removeByName("Телефон");
+        if (removedPhones != null) {
+            System.out.println("Удалено продуктов: " + removedPhones.size());
+            for (Product p : removedPhones) {
+                System.out.println("Удалён: " + p.toString());
+            }
+        } else {
+            System.out.println("Продукт не найден");
         }
+        System.out.println("\nСодержимое корзины после удаления:");
+        basket.printBasketContents();
 
-        try {
-            Product invalidPrice = new SimpleProduct("Телефон", 0);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка: " + e.getMessage());
-        }
+        // Создание SearchEngine
+        SearchEngine searchEngine = new SearchEngine();
+        searchEngine.add(phone1);
+        searchEngine.add(laptop);
+        searchEngine.add(new Article("Обзор телефона", "Телефон имеет отличную камеру."));
 
-        try {
-        } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка: " + e.getMessage());
-        }
-
-
-        final Product p = new SimpleProduct("Телефон Samsung", 10000);
-        System.out.println(p);
-        SearchEngine searchEngine = new SearchEngine(10);
-        searchEngine.add(new SimpleProduct("Телефон Samsung", 10000));
-        searchEngine.add(new DiscountProduct("Телефон Xiaomi", 15000, 20));
-        searchEngine.add(new FixPriceProduct("Чехол для телефона"));
-
-        try {
-            Searchable bestMatch = searchEngine.findBestMatch("телефон");
-            System.out.println("Найден лучший результат: " + bestMatch.getSearchTerm());
-        } catch (BestResultNotFound e) {
-            System.out.println("Ошибка поиска: " + e.getMessage());
-        }
-
-        try {
-            Searchable bestMatch = searchEngine.findBestMatch("несуществующий запрос");
-            System.out.println("Найден лучший результат: " + bestMatch.getSearchTerm());
-        } catch (BestResultNotFound e) {
-            System.out.println("Ошибка поиска: " + e.getMessage());
+        // поиск
+        System.out.println("\nПоиск по 'телефон':");
+        Map<String, Searchable> results = searchEngine.search("телефон");
+        for (Map.Entry<String, Searchable> entry : results.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue().getStringRepresentation());
         }
     }
 }

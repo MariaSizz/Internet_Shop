@@ -18,6 +18,12 @@ public abstract class Product implements Searchable {
 
     public abstract int getPrice();
 
+    /**
+     * Метод для проверки, является ли товар специальным.
+     * По умолчанию false, переопределяется в подклассах.
+     *
+     * @return true, если товар специальный, иначе false
+     */
     public boolean isSpecial() {
         return false;
     }
