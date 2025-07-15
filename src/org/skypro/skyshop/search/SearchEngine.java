@@ -1,23 +1,27 @@
 package org.skypro.skyshop.search;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import org.skypro.skyshop.util.SearchableComparator;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class SearchEngine {
-    private List<Searchable> searchables = new ArrayList<>();
+    private Set<Searchable> searchables = new HashSet<>();
 
     public void add(Searchable searchable) {
         searchables.add(searchable);
     }
 
-    public Map<String, Searchable> search(String query) {
-        Map<String, Searchable> results = new TreeMap<>();
+    public Set<Searchable> search(String query) {
+        Set<Searchable> results = new TreeSet<>(new SearchableComparator());
+
         for (Searchable item : searchables) {
+
             String searchTerm = item.getSearchTerm().toLowerCase();
+
             if (searchTerm.contains(query.toLowerCase())) {
-                results.put(item.getName(), item);
+                results.add(item);
             }
         }
         return results;
@@ -29,25 +33,18 @@ public class SearchEngine {
         }
 
         Searchable bestMatch = null;
-
         int maxCount = 0;
 
-        for (int i = 0; i < searchables.size(); i++) {
-
-            Searchable item = searchables.get(i);
-
+        for (Searchable item : searchables) {
             if (item == null) continue;
 
             String term = item.getSearchTerm().toLowerCase();
-
             String query = search.toLowerCase();
 
             int count = countOccurrences(term, query);
 
             if (count > maxCount) {
-
                 maxCount = count;
-
                 bestMatch = item;
             }
         }
@@ -61,6 +58,7 @@ public class SearchEngine {
     private int countOccurrences(String text, String substring) {
         int count = 0;
         int index = 0;
+
         while ((index = text.indexOf(substring, index)) != -1) {
             count++;
             index += substring.length();

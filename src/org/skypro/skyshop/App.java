@@ -1,6 +1,5 @@
 package org.skypro.skyshop;
 
-import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.content.Article;
 import org.skypro.skyshop.product.DiscountProduct;
 import org.skypro.skyshop.product.Product;
@@ -8,46 +7,25 @@ import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
 
-import java.util.List;
-import java.util.Map;
-
+import java.util.Set;
 
 public class App {
     public static void main(String[] args) {
-        Product phone1 = new SimpleProduct("Телефон", 15000);
-        Product phone2 = new SimpleProduct("Телефон", 15000);
+        Product phone = new SimpleProduct("Телефон", 15000);
         Product laptop = new DiscountProduct("Ноутбук", 50000, 10);
-
-        ProductBasket basket = new ProductBasket();
-        basket.addProduct(phone1);
-        basket.addProduct(phone2);
-        basket.addProduct(laptop);
-
-        System.out.println("Содержимое корзины:");
-        basket.printBasketContents();
-
-        System.out.println("\nУдаление 'Телефон':");
-        List<Product> removedPhones = basket.removeByName("Телефон");
-        if (removedPhones != null) {
-            System.out.println("Удалено продуктов: " + removedPhones.size());
-            for (Product p : removedPhones) {
-                System.out.println("Удалён: " + p.toString());
-            }
-        } else {
-            System.out.println("Продукт не найден");
-        }
-        System.out.println("\nСодержимое корзины после удаления:");
-        basket.printBasketContents();
+        Article article1 = new Article("Обзор телефона", "Телефон имеет отличную камеру.");
+        Article article2 = new Article("Как выбрать ноутбук", "Ноутбук должен быть мощным.");
 
         SearchEngine searchEngine = new SearchEngine();
-        searchEngine.add(phone1);
+        searchEngine.add(phone);
         searchEngine.add(laptop);
-        searchEngine.add(new Article("Обзор телефона", "Телефон имеет отличную камеру."));
+        searchEngine.add(article1);
+        searchEngine.add(article2);
 
         System.out.println("\nПоиск по 'телефон':");
-        Map<String, Searchable> results = searchEngine.search("телефон");
-        for (Map.Entry<String, Searchable> entry : results.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue().getStringRepresentation());
+        Set<Searchable> results = searchEngine.search("телефон");
+        for (Searchable item : results) {
+            System.out.println(item.getStringRepresentation());
         }
     }
 }
