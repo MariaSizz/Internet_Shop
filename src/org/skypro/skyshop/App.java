@@ -1,31 +1,31 @@
 package org.skypro.skyshop;
 
-import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.content.Article;
+import org.skypro.skyshop.product.DiscountProduct;
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.search.SearchEngine;
+import org.skypro.skyshop.search.Searchable;
+
+import java.util.Set;
 
 public class App {
-    public static void main (String[] args) {
-        ProductBasket basket = new ProductBasket(5);
-        Product product1 = new Product("tomato",100);
-        Product product2 = new Product("potato",50);
-        Product product3 = new Product("milk",70);
-        Product product4 = new Product("cheese",200);
-        Product product5 = new Product("pumpkin",80);
-        Product product6 = new Product("orange",100);
-        basket.addProduct(product1);
-        basket.addProduct(product2);
-        basket.addProduct(product3);
-        basket.addProduct(product4);
-        basket.addProduct(product5);
-        basket.addProduct(product6);
-        basket.printBasketContents();
-        boolean result1 = basket.checkProduct(product1);
-        boolean result6 = basket.checkProduct(product6);
-        System.out.println(result1);
-        System.out.println(result6);
-        basket.clear();
-        basket.printBasketContents();
-        boolean result2 =basket.checkProduct(product1);
-        System.out.println(result2);
+    public static void main(String[] args) {
+        Product phone = new SimpleProduct("Телефон", 15000);
+        Product laptop = new DiscountProduct("Ноутбук", 50000, 10);
+        Article article1 = new Article("Обзор телефона", "Телефон имеет отличную камеру.");
+        Article article2 = new Article("Как выбрать ноутбук", "Ноутбук должен быть мощным.");
+
+        SearchEngine searchEngine = new SearchEngine();
+        searchEngine.add(phone);
+        searchEngine.add(laptop);
+        searchEngine.add(article1);
+        searchEngine.add(article2);
+
+        System.out.println("\nПоиск по 'телефон':");
+        Set<Searchable> results = searchEngine.search("телефон");
+        for (Searchable item : results) {
+            System.out.println(item.getStringRepresentation());
+        }
     }
 }
