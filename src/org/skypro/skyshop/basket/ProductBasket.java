@@ -2,54 +2,60 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ProductBasket {
-    private Product[] products;
-
-    public ProductBasket(int size) {
-        this.products = new Product[size];
-    }
+    private Map<String, List<Product>> productsMap = new HashMap<>();
 
     public void addProduct(Product product) {
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] == null) {
-                products[i] = product;
-                return;
-            }
+        String name = product.getName();
+        if (!productsMap.containsKey(name)) {
+            productsMap.put(name, new ArrayList<>());
         }
-        System.out.println("Невозможно добавить продукт");
+
+        productsMap.get(name).add(product);
+
+    }
+
+    public int getTotalPrice() {
+        return productsMap.values().stream()
+                .flatMap(List::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
     }
 
     public void printBasketContents() {
-        int totalCost = 0;
-        boolean isEmpty = true;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] != null) {
-                System.out.println(products[i].getProductName() + ": " + products[i].getProductCost());
-                totalCost = totalCost + products[i].getProductCost();
-                isEmpty = false;
-            }
-        }
-        if (isEmpty) {
+        if (productsMap.isEmpty()) {
             System.out.println("В корзине пусто");
-            System.out.println("Итого: " + totalCost);
-        } else {
-            System.out.println("Итого: " + totalCost);
+            return;
         }
+        productsMap.values().stream()
+                .flatMap(List::stream)
+                .forEach(product -> System.out.println(product.toString()));
+
+        System.out.println("Итого: " + getTotalPrice());
+        System.out.println("Специальных товаров: " + getSpecialCount());
     }
 
-    public boolean checkProduct(Product product) {
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] != null && products[i].getProductName().equals(product.getProductName())) {
-                return true;
-            }
-        }
-        return false;
+    private long getSpecialCount() {
+        return productsMap.values().stream()
+                .flatMap(List::stream)
+                .filter(Product::isSpecial)
+                .count();
     }
 
-    public void clear() {
-        Arrays.fill(products, null);
+    public boolean containsProduct(String productName) {
+        return productsMap.containsKey(productName);
+    }
+
+    public void clearBasket() {
+        productsMap.clear();
+    }
+
+    public List<Product> removeByName(String name) {
+        return productsMap.remove(name);
     }
 }
-
