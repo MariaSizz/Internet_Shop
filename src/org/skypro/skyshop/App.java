@@ -1,31 +1,53 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.content.Article;
+import org.skypro.skyshop.product.DiscountProduct;
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.search.SearchEngine;
+import org.skypro.skyshop.search.Searchable;
+
+import java.util.List;
+import java.util.Map;
+
 
 public class App {
-    public static void main (String[] args) {
-        ProductBasket basket = new ProductBasket(5);
-        Product product1 = new Product("tomato",100);
-        Product product2 = new Product("potato",50);
-        Product product3 = new Product("milk",70);
-        Product product4 = new Product("cheese",200);
-        Product product5 = new Product("pumpkin",80);
-        Product product6 = new Product("orange",100);
-        basket.addProduct(product1);
-        basket.addProduct(product2);
-        basket.addProduct(product3);
-        basket.addProduct(product4);
-        basket.addProduct(product5);
-        basket.addProduct(product6);
+    public static void main(String[] args) {
+        Product phone1 = new SimpleProduct("Телефон", 15000);
+        Product phone2 = new SimpleProduct("Телефон", 15000);
+        Product laptop = new DiscountProduct("Ноутбук", 50000, 10);
+
+        ProductBasket basket = new ProductBasket();
+        basket.addProduct(phone1);
+        basket.addProduct(phone2);
+        basket.addProduct(laptop);
+
+        System.out.println("Содержимое корзины:");
         basket.printBasketContents();
-        boolean result1 = basket.checkProduct(product1);
-        boolean result6 = basket.checkProduct(product6);
-        System.out.println(result1);
-        System.out.println(result6);
-        basket.clear();
+
+        System.out.println("\nУдаление 'Телефон':");
+        List<Product> removedPhones = basket.removeByName("Телефон");
+        if (removedPhones != null) {
+            System.out.println("Удалено продуктов: " + removedPhones.size());
+            for (Product p : removedPhones) {
+                System.out.println("Удалён: " + p.toString());
+            }
+        } else {
+            System.out.println("Продукт не найден");
+        }
+        System.out.println("\nСодержимое корзины после удаления:");
         basket.printBasketContents();
-        boolean result2 =basket.checkProduct(product1);
-        System.out.println(result2);
+
+        SearchEngine searchEngine = new SearchEngine();
+        searchEngine.add(phone1);
+        searchEngine.add(laptop);
+        searchEngine.add(new Article("Обзор телефона", "Телефон имеет отличную камеру."));
+
+        System.out.println("\nПоиск по 'телефон':");
+        Map<String, Searchable> results = searchEngine.search("телефон");
+        for (Map.Entry<String, Searchable> entry : results.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue().getStringRepresentation());
+        }
     }
 }
